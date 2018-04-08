@@ -12,6 +12,6 @@
     "parse5": "^4.0.0"
   },
   "bin": {
-    "parse": "./parse"
+    "youscrap": "./youscrap"
   }
 }
