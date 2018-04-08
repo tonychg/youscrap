@@ -2,7 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 const program = require('commander');
-const { Request } = require('lib');
+const { Scrap } = require('lib');
 
 function getOptions(arguments) {
     return program
@@ -17,8 +17,8 @@ async function main() {
     const options = getOptions(process.argv);
     try {
         if (options.target) {
-            const request = new Request(options.target);
-            await request.send();
+            const scrap = new Scrap(options.target);
+            const links = await scrap.loop();
         }
     } catch (e) {
         throw e;
