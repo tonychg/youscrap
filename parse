@@ -1,0 +1,28 @@
+#!/usr/bin/node
+
+require('app-module-path').addPath(__dirname);
+const program = require('commander');
+const { Request } = require('lib');
+
+function getOptions(arguments) {
+    return program
+        .version('0.1.0')
+        .option('-t --target [url]', 'Targeted page.')
+        .option('-d --destination', 'Place where pages are stored.')
+        .option('-v --verbose', 'Show all logs.')
+        .parse(arguments);
+}
+
+async function main() {
+    const options = getOptions(process.argv);
+    try {
+        if (options.target) {
+            const request = new Request(options.target);
+            await request.send();
+        }
+    } catch (e) {
+        throw e;
+    }
+}
+
+main();
