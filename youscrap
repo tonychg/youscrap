@@ -18,7 +18,7 @@ async function main() {
     try {
         if (options.target) {
             const scrap = new Scrap(options.target);
-            const links = await scrap.loop();
+            await scrap.start();
             // scrap.showPages();
         }
     } catch (e) {
