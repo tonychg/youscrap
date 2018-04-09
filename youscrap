@@ -8,7 +8,7 @@ function getOptions(arguments) {
     return program
         .version('0.1.0')
         .option('-t --target [url]', 'Targeted page.')
-        .option('-d --destination', 'Place where pages are stored.')
+        .option('-d --depth [level]', 'Depth for recursive search.', 1)
         .option('-v --verbose', 'Show all logs.')
         .parse(arguments);
 }
@@ -18,8 +18,9 @@ async function main() {
     try {
         if (options.target) {
             const scrap = new Scrap(options.target);
-            await scrap.start();
-            // scrap.showPages();
+            const pages = await scrap.start(options.depth);
+
+            scrap.showPages();
         }
     } catch (e) {
         throw e;
