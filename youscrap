@@ -24,6 +24,7 @@ async function main() {
         }
     } catch (e) {
         throw e;
+        //TODO('print it')
     }
 }
 

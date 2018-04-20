@@ -9,7 +9,8 @@
     "app-module-path": "^2.2.0",
     "axios": "^0.18.0",
     "commander": "^2.15.1",
-    "parse5": "^4.0.0"
+    "parse5": "^4.0.0",
+    "treeify": "^1.1.0"
   },
   "bin": {
     "youscrap": "./youscrap"
