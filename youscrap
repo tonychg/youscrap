@@ -2,8 +2,7 @@
 
 require('app-module-path').addPath(__dirname);
 const program = require('commander');
-const { Scrap } = require('lib');
-const Tree = require('lib/tree');
+const cli = require('cli/main');
 
 function getOptions(arguments) {
     return program
@@ -19,14 +18,7 @@ async function main() {
 
     try {
         if (options.target) {
-            // const scrap = new Scrap(options.target);
-            // const pages = await scrap.start(options.depth);
-            const tree = new Tree(options.target);
-            console.log(tree.getLeafs());
-            await tree.get();
-            console.log(tree.getLeafs());
-            await tree.get();
-            console.log(tree.getLeafs());
+            await cli(options)
         }
     } catch (e) {
         throw e;
