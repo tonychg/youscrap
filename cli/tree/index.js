@@ -38,15 +38,13 @@ class Tree {
     }
 
     insertNode (parent, path) {
-        if (!this.access(path)) {
-            const childNode = new TNode(parent, path);
-            parent.insertChild(childNode);
-            this.nodes.push(childNode);
-        }
+        const childNode = new TNode(parent, path);
+        parent.insertChild(childNode);
+        this.nodes.push(childNode);
     }
 
     getLeafs () {
-        return this.nodes.filter(node => !node.children.length);
+        return this.nodes.filter(node => !node.children.length && !node.status);
     }
 
 }

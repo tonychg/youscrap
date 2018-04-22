@@ -9,9 +9,10 @@ const { spawnSync } = require('child_process');
 const parse5 = require('parse5');
 
 class Scrapper {
-    constructor (url) {
+    constructor (url, host) {
         this.url = url;
         this.links = [];
+        this.host = host;
     }
 
     extractStaticLinks (page, links=[]) {
