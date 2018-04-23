@@ -15,6 +15,8 @@ module.exports = async (options) => {
         try {
             await requestAllPage(tree);
         } catch (e) {
+            console.error(e);
+            process.exit(42);
         }
         options.depth--;
     } while (options.depth > 0)
