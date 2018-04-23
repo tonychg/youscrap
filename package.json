@@ -8,6 +8,8 @@
   "dependencies": {
     "app-module-path": "^2.2.0",
     "axios": "^0.18.0",
+    "color": "^3.0.0",
+    "colors": "^1.2.1",
     "commander": "^2.15.1",
     "curl": "^0.1.4",
     "follow-redirects": "^1.4.1",
