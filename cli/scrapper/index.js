@@ -5,7 +5,7 @@
 **/
 
 const urlmod = require('url');
-const { spawnSync } = require('child_process');
+const { spawn } = require('child_process');
 const parse5 = require('parse5');
 const https = require('follow-redirects').https;
 
@@ -48,12 +48,27 @@ function extractLinks (host, document, links=[]) {
     return links;
 }
 
-async function requestPage (host, url) {
-    console.log(`Request url => ${url}`);
-    const { error, stdout } = spawnSync('curl', ['-sL', url]);
-    if (error) return null;
-    const body = stdout.toString();
-    return extractLinks(host, parse5.parse(body));
+function getContent(url) {
+    return new Promise(resolve => {
+        const curl = spawn('curl', ['-sL', url]);
+        let output = "";
+
+        curl.stdout.on('data', data => {
+            output += data.toString();
+        });
+        curl.on('close', code => {
+            resolve(parse5.parse(output));
+        });
+    });
+}
+
+function requestPage (host, url) {
+    console.log(`Send request for ${url}`);
+    return new Promise(resolve => {
+        getContent(url).then(content => {
+            resolve(extractLinks(host, content));
+        });
+    });
 }
 
 async function requestAllPage (tree) {
@@ -65,13 +80,13 @@ async function requestAllPage (tree) {
         requests.push(requestPage(tree.host, url));
     });
 
+    console.log(`Wait ${requests.length} requests to be finished.`);
     const results = await Promise.all(requests);
     results.forEach((links, id) => {
         if (links) {
             const newLinks = links.filter(link => !tree.access(link));
             newLinks.forEach(link => {
                 tree.insertNode(leafs[id], link);
-                console.log(`Insert new node ${link}`);
             });
         }
         leafs[id].status = true;

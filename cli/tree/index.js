@@ -39,6 +39,7 @@ class Tree {
 
     insertNode (parent, path) {
         const childNode = new TNode(parent, path);
+        console.log(this.access(path));
         parent.insertChild(childNode);
         this.nodes.push(childNode);
     }
