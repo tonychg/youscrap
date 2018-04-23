@@ -22,7 +22,7 @@ class Tree {
         const url = urlmod.format({
             protocol: this.protocol,
             host: this.host,
-            path: path
+            pathname: path
         });
 
         return url;
@@ -46,7 +46,6 @@ class Tree {
     getLeafs () {
         return this.nodes.filter(node => !node.children.length && !node.status);
     }
-
 }
 
 module.exports = Tree;
