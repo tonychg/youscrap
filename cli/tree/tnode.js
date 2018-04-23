@@ -9,6 +9,7 @@ class TNode {
         this.path = path;
         this.parent = parent;
         this.children = [];
+        this.status = false;
     }
 
     insertChild (child) {

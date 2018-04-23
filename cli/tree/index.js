@@ -22,7 +22,7 @@ class Tree {
         const url = urlmod.format({
             protocol: this.protocol,
             host: this.host,
-            path: path
+            pathname: path
         });
 
         return url;
@@ -38,17 +38,15 @@ class Tree {
     }
 
     insertNode (parent, path) {
-        if (!this.access(path)) {
-            const childNode = new TNode(parent, path);
-            parent.insertChild(childNode);
-            this.nodes.push(childNode);
-        }
+        const childNode = new TNode(parent, path);
+        console.log(this.access(path));
+        parent.insertChild(childNode);
+        this.nodes.push(childNode);
     }
 
     getLeafs () {
-        return this.nodes.filter(node => !node.children.length);
+        return this.nodes.filter(node => !node.children.length && !node.status);
     }
-
 }
 
 module.exports = Tree;

@@ -11,7 +11,11 @@
     "color": "^3.0.0",
     "colors": "^1.2.1",
     "commander": "^2.15.1",
+    "curl": "^0.1.4",
+    "follow-redirects": "^1.4.1",
     "parse5": "^4.0.0",
+    "request": "^2.85.0",
+    "request-promise": "^4.2.2",
     "treeify": "^1.1.0"
   },
   "bin": {
