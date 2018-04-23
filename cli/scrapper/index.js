@@ -8,6 +8,12 @@ const urlmod = require('url');
 const { spawn } = require('child_process');
 const parse5 = require('parse5');
 const https = require('follow-redirects').https;
+const { format } = require('util');
+
+function timedelta(start) {
+    const seconds = (new Date() - start) / 1000;
+    return format('%fs', seconds).padStart(10);
+}
 
 function isValidHref (href, host) {
     // Check if the href is a valid one
@@ -57,16 +63,19 @@ function getContent(url) {
             output += data.toString();
         });
         curl.on('close', code => {
-            resolve(parse5.parse(output));
+            resolve(output);
         });
     });
 }
 
 function requestPage (host, url) {
+    const start = new Date();
     console.log(`Send request for ${url}`);
+
     return new Promise(resolve => {
         getContent(url).then(content => {
-            resolve(extractLinks(host, content));
+            console.log(`${timedelta(start)} ${url.substring(0, 90).padEnd(90)} ${content.length}`);
+            resolve(extractLinks(host, parse5.parse(content)));
         });
     });
 }
@@ -80,7 +89,7 @@ async function requestAllPage (tree) {
         requests.push(requestPage(tree.host, url));
     });
 
-    console.log(`Wait ${requests.length} requests to be finished.`);
+    console.log(`Wait until ${requests.length} requests get resolve.`);
     const results = await Promise.all(requests);
     results.forEach((links, id) => {
         if (links) {

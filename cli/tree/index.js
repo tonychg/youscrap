@@ -29,19 +29,19 @@ class Tree {
     }
 
     access (path) {
-        const search = this.nodes.filter(node => node.path === path);
-        if (search.length === 1) {
-            return search[0];
-        } else {
-            return null;
+        for (let i = 0; i < this.nodes.length; i++) {
+            const node = this.nodes[i];
+            if (node.path === path) {
+                return true;
+            }
         }
+        return false;
     }
 
     insertNode (parent, path) {
         const childNode = new TNode(parent, path);
-        console.log(this.access(path));
-        parent.insertChild(childNode);
         this.nodes.push(childNode);
+        parent.insertChild(childNode);
     }
 
     getLeafs () {
