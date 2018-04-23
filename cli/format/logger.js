@@ -1,1 +1,0 @@
-const color = require('colors');
