@@ -1,4 +1,4 @@
-#!/usr/bin/node
+#!/usr/local/bin/node
 
 require('app-module-path').addPath(__dirname);
 const program = require('commander');
