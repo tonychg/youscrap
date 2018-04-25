@@ -26,6 +26,7 @@ log = {
     state: (content) => {
         //Function to Log state
         //  content = {header: [state, numberOfState], body: 'bodyData', foot: 'footData'}
+        //  content.state = [curr, total]
         //  file is to log or not in file given
         state = ' ' + '('.grey + content.state[0] + '/' + content.state[1] + ')'.grey;
         state = state

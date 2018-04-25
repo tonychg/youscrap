@@ -17,6 +17,7 @@ class Crawler {
         this.urls = urls;
         this.timeout = timeout;
         this.queue = [];
+        this.chunkSize = 200;
     }
 
     timedelta(start) {
@@ -84,11 +85,40 @@ class Crawler {
         });
     }
 
+    * chunkQueue (chunkIndex, chunkCount) {
+        while (chunkIndex < chunkCount) {
+            const startIndex = chunkIndex * this.chunkSize;
+            let chunkUrls = [];
+            if (chunkIndex+1 === chunkCount) {
+                chunkUrls = this.urls.slice(startIndex, this.urls.length);
+            } else {
+                chunkUrls = this.urls.slice(startIndex, startIndex+this.chunkSize);
+            }
+            yield { index: chunkIndex, urls: chunkUrls };
+            chunkIndex++;
+        }
+    }
+
     async resolve () {
         // Push to the queue
-        this.urls.forEach(url => this.queue.push(this.getPage(url)));
-        log.info('LOG', `Wait until ${this.urls.length} links get resolve.`);
-        return await Promise.all(this.queue);
+        if (this.urls.length > this.chunkSize) {
+            const chunkCount = Math.ceil(this.urls.length / this.chunkSize, 1);
+            log.info('LOG', `Need to chunk: ${chunkCount} numbers.`);
+            const chunk = this.chunkQueue(0, chunkCount);
+            let currentChunk = chunk.next();
+
+            while (!currentChunk.done) {
+                log.info('STATE', `${currentChunk.value.index+1}/${chunkCount}`)
+                const chunkedUrls = currentChunk.value.urls.map(url => this.getPage(url));
+                this.queue.push(await Promise.all(chunkedUrls));
+                currentChunk = chunk.next();
+            }
+            return this.queue;
+        } else {
+            this.urls.forEach(url => this.queue.push(this.getPage(url)));
+            log.info('LOG', `Wait until ${this.urls.length} links get resolve.`);
+            return await Promise.all(this.queue);
+        }
     }
 }
 
