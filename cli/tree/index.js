@@ -5,6 +5,7 @@
 **/
 
 const TNode = require('./tnode');
+const showTree = require('./showtree');
 const urlmod = require('url');
 
 class Tree {
@@ -47,6 +48,11 @@ class Tree {
     getLeafs () {
         return this.nodes.filter(node => !node.children.length && !node.status);
     }
+
+    showTree () {
+        return showTree(this);
+    }
+
 }
 
 module.exports = Tree;
