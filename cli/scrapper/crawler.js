@@ -74,10 +74,6 @@ class Crawler {
         return new Promise(resolve => {
             const start = new Date();
             log.info('REQUEST', url);
-            // setTimeout(() => {
-            //     this.log('TIMEOUT', url);
-            //     resolve([]);
-            // }, 1000 * this.timeout);
             this.request(url).then(body => {
                 log.time(this.timedelta(start), url, body.length);
                 resolve(this.extractLinks(url, parse5.parse(body)));
@@ -88,13 +84,12 @@ class Crawler {
     * chunkQueue (chunkIndex, chunkCount) {
         while (chunkIndex < chunkCount) {
             const startIndex = chunkIndex * this.chunkSize;
-            let chunkUrls = [];
-            if (chunkIndex+1 === chunkCount) {
-                chunkUrls = this.urls.slice(startIndex, this.urls.length);
-            } else {
-                chunkUrls = this.urls.slice(startIndex, startIndex+this.chunkSize);
-            }
-            yield { index: chunkIndex, urls: chunkUrls };
+            yield {
+                index: chunkIndex,
+                urls: chunkIndex+1 === chunkCount
+                    ? this.urls.slice(startIndex, this.urls.length)
+                    : this.urls.slice(startIndex, startIndex+this.chunkSize)
+            };
             chunkIndex++;
         }
     }
@@ -103,12 +98,11 @@ class Crawler {
         // Push to the queue
         if (this.urls.length > this.chunkSize) {
             const chunkCount = Math.ceil(this.urls.length / this.chunkSize, 1);
-            log.info('LOG', `Need to chunk: ${chunkCount} numbers.`);
             const chunk = this.chunkQueue(0, chunkCount);
             let currentChunk = chunk.next();
 
             while (!currentChunk.done) {
-                log.info('STATE', `${currentChunk.value.index+1}/${chunkCount}`)
+                log.info('STATE', `Resolve Chunk ${currentChunk.value.index+1}/${chunkCount}`)
                 const chunkedUrls = currentChunk.value.urls.map(url => this.getPage(url));
                 this.queue.push(await Promise.all(chunkedUrls));
                 currentChunk = chunk.next();
