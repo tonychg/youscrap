@@ -17,7 +17,7 @@ class Crawler {
         this.urls = urls;
         this.timeout = timeout;
         this.queue = [];
-        this.chunkSize = 200;
+        this.chunkSize = 50;
     }
 
     timedelta(start) {
