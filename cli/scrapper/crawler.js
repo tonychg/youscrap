@@ -9,6 +9,7 @@ const url = require('url');
 const { spawn } = require('child_process');
 const { format } = require('util');
 const log = require('./log');
+
 // Crawl all href from all urls with timeout check from the same host source
 class Crawler {
     constructor (host, urls, timeout=20) {
