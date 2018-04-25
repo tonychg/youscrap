@@ -23,41 +23,32 @@ class Crawler {
         return format('%fs', seconds);
     }
 
-        isValidHref (href) {
-        // Check if the href is a valid one
-        if (href && href.value) {
-            const link = href.value.trim();
-            if (link.length > 0) {
-                if (link[0] === '/') {
-                    const absoluteLink = `https://${this.host}${link}`;
-                    return link;
-                } else {
-                    const { host, path } = url.parse(link);
-                    if (this.host === host) {
-                        return path;
-                    }
-                }
-            }
+    isValidHref (pageUrl, href) {
+        if (!href || !href.value) return null;
+        const destUrl = url.resolve(pageUrl, href.value);
+        const destObj = url.parse(destUrl);
+        if (this.host === destObj.host) {
+            return destObj.path;
         }
         return null;
     }
 
-    extractLinks (document, links=[]) {
+    extractLinks (pageUrl, document, links=[]) {
         // document => parse5 Object
         // Recursive search of all href with the same hostname
         if (document.length > 0) {
             document.forEach(node => {
                 if (node.tagName === 'a') {
                     const [href] = node.attrs.filter(attr => attr.name === 'href');
-                    const link = this.isValidHref(href);
+                    const link = this.isValidHref(pageUrl, href);
                     link && links.push(link);
                 }
             })
-            document.map(node => this.extractLinks(node, links));
+            document.map(node => this.extractLinks(pageUrl, node, links));
         } else {
             Object.keys(document)
                 .filter(key => key === 'childNodes')
-                .forEach(key => this.extractLinks(document[key], links));
+                .forEach(key => this.extractLinks(pageUrl, document[key], links));
         }
         return links;
     }
@@ -87,7 +78,7 @@ class Crawler {
             // }, 1000 * this.timeout);
             this.request(url).then(body => {
                 log.time(this.timedelta(start), url, body.length);
-                resolve(this.extractLinks(parse5.parse(body)));
+                resolve(this.extractLinks(url, parse5.parse(body)));
             });
         });
     }
