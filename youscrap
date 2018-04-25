@@ -7,8 +7,9 @@ const cli = require('cli/main');
 function getOptions(arguments) {
     return program
         .version('0.1.0')
-        .option('-t --target [url]', 'Targeted page.')
+        .option('-u --url [url]', 'Targeted page.')
         .option('-d --depth [level]', 'Depth for recursive search.', 1)
+        .option('-t --tree [tree]', 'Boolean to show tree.', 1)
         .option('-v --verbose', 'Show all logs.')
         .parse(arguments);
 }
@@ -17,7 +18,7 @@ async function main() {
     const options = getOptions(process.argv);
 
     try {
-        if (options.target) {
+        if (options.url) {
             await cli(options)
         }
     } catch (e) {
