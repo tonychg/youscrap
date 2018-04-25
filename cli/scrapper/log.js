@@ -43,7 +43,7 @@ log = {
         // body is the log body
         // foot is the log foot
         //  file is to log or not in file given
-        state = ' ' + '('.grey + content.state[0] + '/' + content.state[1] + ')'.grey;
+        state = ' ' + '('.grey + state[0] + '/' + content.state[1] + ')'.grey;
         state = state
             .padEnd(log.__headerSize)
             .bold;

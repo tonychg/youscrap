@@ -3,12 +3,13 @@ const color = require('colors');
 function showTree (tree, showDataEndpoint=false) {
     let lines = []
     paseNodes(tree.nodes, lines, deep=0);
+    endPointNumber = tree.getLeafs().length;
     treeDatas = 'url : '.bold + tree.url + '\n' +
-        'endPoints : '.bold + '2';
-    console.log(treeDatas)
+        'endPoints : '.bold + endPointNumber//TODO;
     lines.forEach( (line) => {
         console.log(line)
     })
+    console.log(treeDatas)
 }
 
 function paseNodes(nodes, lines, deep, prefix = ''){
