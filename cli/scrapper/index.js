@@ -4,25 +4,20 @@
  *  Description:
 **/
 
-const Crawler = require('./crawler');
 
-async function requestAllPage (tree) {
-    const leafs = tree.getLeafs();
-    if (!leafs.length) throw 'No links.';
+const url = require('url');
+const Website = require('./website');
 
-    const urls = leafs.map(leaf => tree.getFullUrl(leaf.path));
-    const results = await new Crawler(tree.host, urls).resolve();
-    results.forEach((links, id) => {
-        if (links) {
-            const newLinks = links.filter(link => !tree.access(link));
-            newLinks.forEach(link => {
-                tree.insertNode(leafs[id], link);
-            });
-        }
-        leafs[id].status = true;
+async function scrapper (baseurl, options) {
+    const website = new Website(baseurl, {
+        iteration: options.depth,
+        log: options.verbose
     });
-    return tree;
+
+    await website.resolve();
+
+    website.show(null, options.tree);
 }
 
-module.exports = { requestAllPage };
+module.exports = scrapper;
 

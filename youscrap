@@ -6,10 +6,10 @@ const cli = require('cli/main');
 
 function getOptions(arguments) {
     return program
-        .version('0.1.0')
+        .version('0.5.0')
         .option('-u --url [url]', 'Targeted page.')
         .option('-d --depth [level]', 'Depth for recursive search.', 1)
-        .option('-t --tree [tree]', 'Boolean to show tree.', 1)
+        .option('-t --tree', 'Boolean to show tree.')
         .option('-v --verbose', 'Show all logs.')
         .parse(arguments);
 }
