@@ -16,20 +16,6 @@ class Website {
         this.chunkSize = 50;
     }
 
-    show (node, tree) {
-        if (!node) node = this.root;
-        if (tree) {
-            console.log(`${''.padStart(node.level * 4, '.')} ${node.path}`);
-        } else {
-            console.log(`${node.url}`);
-        }
-        if (node.children.length > 0) {
-            node.children.forEach(child => {
-                this.show(child, tree);
-            });
-        }
-    }
-
     isInTree (path) {
         for (let i = 0; i < this.nodes.length; i++) {
             if (this.nodes[i].path === path) {

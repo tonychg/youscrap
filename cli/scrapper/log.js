@@ -1,7 +1,54 @@
 const colors = require('colors');
 
+function show (website, tree) {
+    if(tree){
+        lines = [];
+        lines.push('/');
+        nodes = website.root.children;
+        if(nodes.length > 0) paseNodes(nodes);
+        lines.forEach( (line) => {
+            console.log(line);
+        })
+    } else {
+        // log.info()
+        showAsLine(website.root);
+    }
+}
+
+function paseNodes(nodes, prefix = ''){
+    for (let i=0; i < nodes.length; i++) {
+        let line = ['', nodes[i].path];
+        if (i == nodes.length -1) line[0] = prefix + '└── ';
+        else line[0] = prefix + '├── '
+        if (!nodes[i].children) {
+            lines.push(line[0] + line[1].green)
+        }
+        else {
+            lines.push(line[0] + line[1])
+            newPrefix = prefix;
+            if (i < nodes.length-1) {
+                newPrefix += '│   ';
+            }
+            else {
+                newPrefix += '    ';
+            }
+            if (i == nodes.length) newPrefix = newPrefix.replace(' ','│');
+            paseNodes(nodes[i].children, newPrefix);
+        }
+    }
+}
+
+function showAsLine (node) {
+    log.info('url', `${node.url}`);
+    if (node.children.length > 0) {
+        node.children.forEach(child => {
+            showAsLine(child);
+        });
+    }
+}
+
 log = {
-    __headerSize: 32, //the size of the header for alignment
+    __headerSize: 26, //the size of the header for alignment
     __bodySize: 95,   //the size of the body for aligment
     info: (head, body, foot, file=false) => {
         //Function to Log data
@@ -91,4 +138,4 @@ log = {
     }
 }
 
-module.exports = log;
+module.exports = show;

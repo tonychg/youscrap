@@ -7,6 +7,7 @@
 
 const url = require('url');
 const Website = require('./website');
+const log = require('./log');
 
 async function scrapper (baseurl, options) {
     const website = new Website(baseurl, {
@@ -16,7 +17,7 @@ async function scrapper (baseurl, options) {
 
     await website.resolve();
 
-    website.show(null, options.tree);
+    log(website, options.tree);
 }
 
 module.exports = scrapper;
