@@ -6,11 +6,13 @@
 
 const Page = require('./page.js')
 const url = require('url');
+const log = require('./log.js')
 
 class Website {
-    constructor (baseurl, { iteration, log }) {
+    constructor (baseurl, { iteration, log, clear }) {
         this.log = log;
-        this.root = new Page(null, baseurl, this.log);
+        this.clear = clear;
+        this.root = new Page(null, baseurl, this.log, this.clear);
         this.nodes = [this.root];
         this.maxIter = iteration;
         this.chunkSize = 50;
@@ -56,7 +58,7 @@ class Website {
         let leafId = 0;
         for (let step = 0; step < queue.length; step++) {
             if (queue.length > 1 && this.log) {
-                console.log(`Step: ${step+1}/${queue.length}`);
+                log.state([step+1, queue.length], 'Stagging', 'OK', this.clear);
             }
             const results = await Promise.all(queue[step].map(leaf => leaf.crawl()));
 
@@ -66,7 +68,7 @@ class Website {
                         if (!this.isInTree(link)) {
                             const parent = leafs[leafId];
                             const nodeUrl = url.resolve(parent.url, link);
-                            const newNode = new Page(parent, nodeUrl, this.log);
+                            const newNode = new Page(parent, nodeUrl, this.log, this.clear);
                             parent.children.push(newNode);
                             this.nodes.push(newNode);
                         }
