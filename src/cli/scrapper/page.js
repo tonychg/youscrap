@@ -20,7 +20,6 @@ class Page {
         this.level = !parent ? 0 : parent.level + 1;
         this.log = logging;
         this.clear = clear;
-        console.log(this.url)
     }
 
     timedelta (begin) {
