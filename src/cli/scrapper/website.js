@@ -56,8 +56,8 @@ class Website {
 
         let leafId = 0;
         for (let step = 0; step < queue.length; step++) {
-            if (queue.length > 1 && this.log) {
-                log.state([step+1, queue.length], 'Stagging', 'OK', this.clear);
+            if (queue.length > 1 && this.log.verbose) {
+                this.log.state([step+1, queue.length], 'Stagging', 'OK');
             }
             const results = await Promise.all(queue[step].map(leaf => leaf.crawl()));
 

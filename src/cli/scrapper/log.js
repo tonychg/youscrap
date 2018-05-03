@@ -113,13 +113,13 @@ class log {
         console.log(line);
     }
 
-    state (head, body, foot) {
+    state (state, body, foot) {
         //Function to Log state
         // header is the log header
         // body is the log body
         // foot is the log foot
         if (this.color) {
-            state = '('.grey + head[0] + '/' + head[1] + ')'.grey;
+            state = '('.grey + state[0] + '/' + state[1] + ')'.grey;
             state = state
                 .padEnd(log.__headerSize)
                 .bold;
@@ -134,7 +134,6 @@ class log {
         let line = `${state} ${body} ${foot}`;
         this.addLine(line);
         console.log(line);
-        console.log(`${state} ${body} ${foot}`);
     }
 }
 
