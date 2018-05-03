@@ -1,4 +1,10 @@
 #!/usr/local/bin/node --no-warnings
+/*
+ *  Github/TonyChG
+ *  Github/Dauliac
+ *  page.js
+ *  Description: A small cli to get an log all website's routes
+*/
 
 require('app-module-path').addPath(__dirname);
 const program = require('commander');

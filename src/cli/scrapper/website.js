@@ -1,8 +1,9 @@
 /*
  *  Github/TonyChG
- *  website.js
- *  Description:
-**/
+ *  Github/Dauliac
+ *  page.js
+ *  Description: The website object that contains all datas
+*/
 
 const Page = require('./page.js')
 const url = require('url');

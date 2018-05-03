@@ -1,3 +1,9 @@
+/*
+ *  Github/TonyChG
+ *  Github/Dauliac
+ *  index.js
+ *  Description: The log object that contain some logging options
+**/
 const colors = require('colors');
 const fs = require('fs/promises');
 
@@ -8,8 +14,8 @@ class log {
         this.file = file;
         this.lines = [];
         if(tree) this.tree = [];
-        this.__headerSize = 26; //the size of the header for alignment
-        this.__bodySize = 95;   //the size of the body for aligment
+        this.__headerSize = 26; //the size of the header for symetric alignment
+        this.__bodySize = 95;   //the size of the body for symetric aligment
     }
 
     addLine (line) {
@@ -18,12 +24,14 @@ class log {
     }
 
     writeOrLog (line) {
+        // Write if you used -f option or simply log
+        this.addLine(line);
         if (this.file) this.writeLine(line);
         else console.log(line);
     }
     
     async writeLine (line) {
-        //Add line in the file
+        //Write line in the file
         try {
             await fs.appendFile(this.file, line + '\n');
         } catch (e) {
@@ -32,6 +40,7 @@ class log {
     }
 
     parseTree (nodes, prefix = '') {
+        //Create this.tree array
         for (let i=0; i < nodes.length; i++) {
             let line = ['', nodes[i].path];
             if (i == nodes.length -1) line[0] = prefix + '└── ';
@@ -51,6 +60,7 @@ class log {
     }
 
     showAsTree (nodes) {
+        //Log the this.tree array
         this.parseTree(nodes)
         this.tree.forEach( (branch) => {
             console.log(branch);
@@ -86,8 +96,7 @@ class log {
         }
         if (!foot) foot = ''
         else foot = foot.bold;
-        let line = `${head} ${body} ${foot}`;
-        this.writeOrLog(line);
+        this.writeOrLog(`${head} ${body} ${foot}`);
     }
 
     time (time, body, foot) {
@@ -109,9 +118,7 @@ class log {
         }
 
         if (!foot) foot = '';
-        let line = `${time} ${body} ${foot}`;
-        this.addLine(line);
-        this.writeOrLog(line);
+        this.writeOrLog(`${time} ${body} ${foot}`);
     }
 
     state (state, body, foot) {
@@ -132,8 +139,7 @@ class log {
             body = body;
         }
         if (!foot) foot = '';
-        let line = `${state} ${body} ${foot}`;
-        this.writeOrLog(line);
+        this.writeOrLog(`${state} ${body} ${foot}`);
     }
 }
 

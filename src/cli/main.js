@@ -1,7 +1,8 @@
 /*
  *  Github/TonyChG
- *  main.js
- *  Description:
+ *  Github/Dauliac
+ *  page.js
+ *  Description: The main file that lauch the cli
 **/
 
 const scrapper = require('./scrapper');

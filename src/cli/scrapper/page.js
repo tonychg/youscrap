@@ -1,9 +1,9 @@
 /*
  *  Github/TonyChG
- *  page.js
- *  Description:
+ *  Github/Dauliac
+ *  index.js
+ *  Description: The page url that contain an url datas
 **/
-
 const url = require('url');
 const parse5 = require('parse5');
 const { spawn } = require('child_process');
