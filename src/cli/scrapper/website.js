@@ -9,7 +9,7 @@ const url = require('url');
 const log = require('./log.js')
 
 class Website {
-    constructor (baseurl, { iteration, log}) {
+    constructor (baseurl, { iteration, log }) {
         this.log = log;
         this.root = new Page(null, baseurl, this.log);
         this.nodes = [this.root];

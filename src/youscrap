@@ -20,13 +20,13 @@ async function main() {
     const options = getOptions(process.argv);
     try {
         if (!options.url) {
-            console.log('  error: option `a-u, --url <url>` argument missing')
+            console.log('  error: option `-u, --url <url>` argument missing')
             process.exit(1);
         }
         await cli(options)
     } catch (e) {
-        throw e;
         log.error('ERROR', e.message)
+        throw e;
     }
 }
 
