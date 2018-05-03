@@ -7,6 +7,7 @@
 const Page = require('./page.js')
 const url = require('url');
 const log = require('./log.js')
+const inquirer = require('inquirer');
 
 class Website {
     constructor (baseurl, { iteration, log }) {
@@ -39,8 +40,22 @@ class Website {
         return leafs;
     }
 
+    async confirm (leafsNumber) {
+        const question = {
+            type: 'confirm',
+            name: 'response',
+            message: `${leafsNumber} page to fetch, are you sure ?`,
+        }
+
+        return inquirer.prompt([ question ]);
+    }
+
     async resolveQueue () {
         const leafs = this.getLeafs();
+        if (leafs.length > 1500) {
+            const { response } = await this.confirm(leafs.length);
+            if (!response) process.exit(0);
+        }
         const queue = [];
 
         if (leafs.length > this.chunkSize) {
