@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/local/bin/node --no-warnings
 
 require('app-module-path').addPath(__dirname);
 const program = require('commander');
@@ -12,7 +12,7 @@ function getOptions(arguments) {
         .option('-t, --tree', 'Boolean to show tree.')
         .option('-v, --verbose', 'Show all logs.')
         .option('-c, --color', 'Show colorfull logs')
-        .option('-f, --file <file>', 'write logs into file.')
+        .option('-f, --file [result.log]', 'write logs into file.')
         .parse(arguments);
 }
 

@@ -1,5 +1,5 @@
 const colors = require('colors');
-const fs = require('fs');
+const fs = require('fs/promises');
 
 class log {
     constructor (color, tree, verbose, file){
@@ -17,31 +17,33 @@ class log {
         this.lines.push(line);
     }
 
-    writeFile () {
-        this.fileStream = fs.createWriteStream(this.file);
-        this.lines.forEach( (line) => {
-            this.fileStream.write(line + '\n');
-        })
-        this.fileStream.end();
+    writeOrLog (line) {
+        if (this.file) this.writeLine(line);
+        else console.log(line);
+    }
+    
+    async writeLine (line) {
+        //Add line in the file
+        try {
+            await fs.appendFile(this.file, line + '\n');
+        } catch (e) {
+            throw e;
+        }
     }
 
-    parseTree(nodes, prefix = ''){
+    parseTree (nodes, prefix = '') {
         for (let i=0; i < nodes.length; i++) {
             let line = ['', nodes[i].path];
             if (i == nodes.length -1) line[0] = prefix + '└── ';
             else line[0] = prefix + '├── '
-            if (!nodes[i].children) {
-                this.tree.push(line[0] + line[1].green)
-            }
+            if (!nodes[i].children) this.tree.push(line[0] + line[1].green)
             else {
                 this.tree.push(line[0] + line[1])
                 let newPrefix = prefix;
                 if (i < nodes.length-1) {
                     newPrefix += '│   ';
                 }
-                else {
-                    newPrefix += '    ';
-                }
+                else newPrefix += '    ';
                 if (i == nodes.length) newPrefix = newPrefix.replace(' ','│');
                 this.parseTree(nodes[i].children, newPrefix);
             }
@@ -70,7 +72,7 @@ class log {
         // header is the log header
         // body is the log body
         // foot is the log foot
-        if (this.color) {
+        if (this.color && !this.file) {
             head = '['.green + head + ']'.green;
             head = head
                 .padEnd(log.__headerSize)
@@ -85,8 +87,7 @@ class log {
         if (!foot) foot = ''
         else foot = foot.bold;
         let line = `${head} ${body} ${foot}`;
-        this.addLine(line);
-        console.log(line);
+        this.writeOrLog(line);
     }
 
     time (time, body, foot) {
@@ -94,7 +95,7 @@ class log {
         // time is the log time duration
         // body is the log body
         // foot is the log foot
-        if (this.color) {
+        if (this.color && !this.file) {
             time = time.padEnd(6) + ' ::'.blue;
             time = time
                 .bold
@@ -110,7 +111,7 @@ class log {
         if (!foot) foot = '';
         let line = `${time} ${body} ${foot}`;
         this.addLine(line);
-        console.log(line);
+        this.writeOrLog(line);
     }
 
     state (state, body, foot) {
@@ -118,7 +119,7 @@ class log {
         // header is the log header
         // body is the log body
         // foot is the log foot
-        if (this.color) {
+        if (this.color && !this.file) {
             state = '('.grey + state[0] + '/' + state[1] + ')'.grey;
             state = state
                 .padEnd(log.__headerSize)
@@ -127,13 +128,12 @@ class log {
                 .substring(0, log.__bodySize)
                 .padEnd(log.__bodySize+3);
         } else {
-            state = '(' + head[0] + '/' + head[1] + ')';
+            state = '(' + state[0] + '/' + state[1] + ')';
             body = body;
         }
         if (!foot) foot = '';
         let line = `${state} ${body} ${foot}`;
-        this.addLine(line);
-        console.log(line);
+        this.writeOrLog(line);
     }
 }
 
