@@ -25,24 +25,25 @@ class log {
         this.fileStream.end();
     }
 
-    parseTree (nodes, prefix = '') {
-        //Parse add and log the tree to this;
-        if (this.tree.length == 0) {
-            this.tree.push('/');
-        }
+    parseTree(nodes, prefix = ''){
         for (let i=0; i < nodes.length; i++) {
             let line = ['', nodes[i].path];
             if (i == nodes.length -1) line[0] = prefix + '└── ';
-            else line[0] = prefix + '├── ';
-            if (nodes[i].children) {
-                this.tree.push(line[0] + line[1]);
+            else line[0] = prefix + '├── '
+            if (!nodes[i].children) {
+                this.tree.push(line[0] + line[1].green)
+            }
+            else {
+                this.tree.push(line[0] + line[1])
                 let newPrefix = prefix;
-                if (i < nodes.length-1) newPrefix += '│   ';
-                else newPrefix += '    ';
+                if (i < nodes.length-1) {
+                    newPrefix += '│   ';
+                }
+                else {
+                    newPrefix += '    ';
+                }
                 if (i == nodes.length) newPrefix = newPrefix.replace(' ','│');
-                this.showAsTree(nodes[i].children, newPrefix);
-            } else {
-                this.tree.push(line[0] + line[1]);
+                this.parseTree(nodes[i].children, newPrefix);
             }
         }
     }
