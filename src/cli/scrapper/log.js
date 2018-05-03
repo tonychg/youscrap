@@ -25,24 +25,25 @@ class log {
         this.fileStream.end();
     }
 
-    parseTree (nodes, prefix = '') {
-        //Parse add and log the tree to this;
-        if (this.tree.length == 0) {
-            this.tree.push('/');
-        }
+    parseTree(nodes, prefix = ''){
         for (let i=0; i < nodes.length; i++) {
             let line = ['', nodes[i].path];
             if (i == nodes.length -1) line[0] = prefix + '└── ';
-            else line[0] = prefix + '├── ';
-            if (nodes[i].children) {
-                this.tree.push(line[0] + line[1]);
+            else line[0] = prefix + '├── '
+            if (!nodes[i].children) {
+                this.tree.push(line[0] + line[1].green)
+            }
+            else {
+                this.tree.push(line[0] + line[1])
                 let newPrefix = prefix;
-                if (i < nodes.length-1) newPrefix += '│   ';
-                else newPrefix += '    ';
+                if (i < nodes.length-1) {
+                    newPrefix += '│   ';
+                }
+                else {
+                    newPrefix += '    ';
+                }
                 if (i == nodes.length) newPrefix = newPrefix.replace(' ','│');
-                this.showAsTree(nodes[i].children, newPrefix);
-            } else {
-                this.tree.push(line[0] + line[1]);
+                this.parseTree(nodes[i].children, newPrefix);
             }
         }
     }
@@ -112,13 +113,13 @@ class log {
         console.log(line);
     }
 
-    state (head, body, foot) {
+    state (state, body, foot) {
         //Function to Log state
         // header is the log header
         // body is the log body
         // foot is the log foot
         if (this.color) {
-            state = '('.grey + head[0] + '/' + head[1] + ')'.grey;
+            state = '('.grey + state[0] + '/' + state[1] + ')'.grey;
             state = state
                 .padEnd(log.__headerSize)
                 .bold;
@@ -133,7 +134,6 @@ class log {
         let line = `${state} ${body} ${foot}`;
         this.addLine(line);
         console.log(line);
-        console.log(`${state} ${body} ${foot}`);
     }
 }
 
