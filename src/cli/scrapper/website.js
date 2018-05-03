@@ -9,10 +9,9 @@ const url = require('url');
 const log = require('./log.js')
 
 class Website {
-    constructor (baseurl, { iteration, log, clear }) {
+    constructor (baseurl, { iteration, log}) {
         this.log = log;
-        this.clear = clear;
-        this.root = new Page(null, baseurl, this.log, this.clear);
+        this.root = new Page(null, baseurl, this.log);
         this.nodes = [this.root];
         this.maxIter = iteration;
         this.chunkSize = 50;
@@ -68,7 +67,7 @@ class Website {
                         if (!this.isInTree(link)) {
                             const parent = leafs[leafId];
                             const nodeUrl = url.resolve(parent.url, link);
-                            const newNode = new Page(parent, nodeUrl, this.log, this.clear);
+                            const newNode = new Page(parent, nodeUrl, this.log);
                             parent.children.push(newNode);
                             this.nodes.push(newNode);
                         }

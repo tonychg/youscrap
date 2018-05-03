@@ -11,15 +11,14 @@ const log = require('./log');
 const { format } = require('util');
 
 class Page {
-    constructor (parent, baseurl, logging, clear) {
+    constructor (parent, baseurl, log) {
         this.parent = parent;
         this.url = baseurl;
         this.getUrlInfo();
         this.children = [];
         this.status = false;
         this.level = !parent ? 0 : parent.level + 1;
-        this.log = logging;
-        this.clear = clear;
+        this.log = log;
     }
 
     timedelta (begin) {
@@ -83,7 +82,7 @@ class Page {
             const begin = new Date();
             const body = await this.request();
             const links = this.extractLinks(parse5.parse(body))
-            if (this.log) log.time(this.timedelta(begin), this.path, links.length, this.clear);
+            if (this.log.verbose) this.log.time(this.timedelta(begin), this.path, links.length, this.clear);
             this.status = true;
             return links;
         }

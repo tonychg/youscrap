@@ -12,11 +12,18 @@ const log = require('./log');
 async function scrapper (baseurl, options) {
     const website = new Website(baseurl, {
         iteration: options.depth,
-        log: options.verbose,
+        log: new log(options.color, options.tree, options.verbose, options.file),
         clear: options.clear
     });
     await website.resolve();
-    log.show(website, options.tree, options.clear);
+    let firstNode = website.root;
+    if(website.log.file) website.log.writeFile();
+    else {
+        if(website.log.tree) {
+            // website.log.parseTree(firstNode.children);
+            website.log.showAsTree(firstNode.children);
+        } else website.log.showAsLine(firstNode);
+    }
 }
 
 module.exports = scrapper;

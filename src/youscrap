@@ -11,7 +11,8 @@ function getOptions(arguments) {
         .option('-d, --depth [level]', 'Depth for recursive search.', 1)
         .option('-t, --tree', 'Boolean to show tree.')
         .option('-v, --verbose', 'Show all logs.')
-        .option('-c --clear', 'Show logs without makup')
+        .option('-c, --color', 'Show colorfull logs')
+        .option('-f, --file <file>', 'write logs into file.')
         .parse(arguments);
 }
 
